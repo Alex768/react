@@ -16,40 +16,46 @@ import './styles.css';
  */
 
 function renderPosts(posts) {
-  //<div className="emptyPosts">Нет откликов</div>
-  //<div className="singlePost">Единственный отклик</div>
-  return <div className="posts">Отклики в количестве {posts.length}</div>;
+    if (! (Array.isArray(posts) && posts.length))
+    {
+        return <div className="emptyPosts">Нет откликов</div>;
+    }
+    if (posts.length === 1)
+    {
+        return <div className="singlePost">Единственный отклик</div>;
+    }
+    return <div className="posts">Отклики в количестве {posts.length}</div>;
 }
 
 function renderLot(name, description, tags) {
-  return (
-    <div className="lot">
-      <div className="lotName">{name}</div>
-      <div className="lotDescription">{description}</div>
-      {renderTags(tags)}
-    </div>
-  );
+    return (
+        <div className="lot">
+            <div className="lotName">{name || '<Неизвестный предмет>'}</div>
+            {description && <div className="lotDescription">{description}</div>}
+            {renderTags(tags)}
+        </div>
+    );
 }
 
 function renderTags(tags) {
-  const content = tags.join(', ');
-  return <div className="lotTags">{content}</div>;
+    const content = tags.join(', ');
+    return tags.length > 0 && <div className="lotTags">{content}</div>;
 }
 
 ReactDom.render(
-  <div>
-      <div className="page">
-          {renderLot('', 'красный, красивый, твой!', [])}
-          {renderPosts([])}
-      </div>
-      <div className="page">
-          {renderLot('Пирожок с капустой', undefined, ['#свежий', '#ручнаяРабота'])}
-          {renderPosts(['Тут ровно один отклик'])}
-      </div>
-      <div className="page">
-          {renderLot('', '', ['#большой', '#Яркий'])}
-          {renderPosts(['Класс!', 'Хочу еще!', 'Отстой'])}
-      </div>
-  </div>,
-  document.getElementById('app')
+    <div>
+        <div className="page">
+            {renderLot('', 'красный, красивый, твой!', [])}
+            {renderPosts([])}
+        </div>
+        <div className="page">
+            {renderLot('Пирожок с капустой', undefined, ['#свежий', '#ручнаяРабота'])}
+            {renderPosts(['Тут ровно один отклик'])}
+        </div>
+        <div className="page">
+            {renderLot('', '', ['#большой', '#Яркий'])}
+            {renderPosts(['Класс!', 'Хочу еще!', 'Отстой'])}
+        </div>
+    </div>,
+    document.getElementById('app')
 );
